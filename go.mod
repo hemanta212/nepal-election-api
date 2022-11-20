@@ -1,4 +1,4 @@
-module github.com/hemanta212/goscraper
+module github.com/hemanta212/nepal-election-api
 
 go 1.18
 

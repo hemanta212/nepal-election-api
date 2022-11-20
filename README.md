@@ -1,4 +1,4 @@
-# GO Election API 2079
+# Nepal Election API 2079
 
 Developed using the fantastic [gocolly](https://github.com/gocolly/colly) scraping library, data source is [ekantipur](https://election.ekantipur.com)
 
@@ -8,7 +8,7 @@ This repo was developed as backend for election-bot for reddit hosted at https:/
 - Install go
 - Clone the repo
 ```
-git clone https://github.com/hemanta212/election-api-go
+git clone https://github.com/hemanta212/nepal-election-api
 ```
 
 ## Usage

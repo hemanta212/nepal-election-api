@@ -20,6 +20,7 @@ func fetchArea(url string) map[string][]map[string]string {
 		} else {
 			lastLoggedConstituency = constituencyNo
 		}
+		constituencyName = strings.ToLower(constituencyName)
 
 		nomineeData := []map[string]string{}
 		e.ForEach("div.candidate-meta", func(i int, el *colly.HTMLElement) {
@@ -29,8 +30,9 @@ func fetchArea(url string) map[string][]map[string]string {
 			nomineeName := el.ChildText("div.nominee-name")
 			nomineeParty := el.ChildText("div.candidate-party-name")
 			nomineeData = append(nomineeData, map[string]string{
-				"Name":  nomineeName,
-				"Party": nomineeParty,
+				"name":  nomineeName,
+				"party": nomineeParty,
+				"votes": "0",
 			})
 		})
 		results[constituencyName] = nomineeData

@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	fmt.Println(":: Listening on port http://localhost:8090")
 	http.HandleFunc("/", usage)
 	http.HandleFunc("/area", areaHandler)
 	http.HandleFunc("/url", urlHandler)
