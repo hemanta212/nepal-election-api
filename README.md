@@ -9,7 +9,22 @@ This repo was developed as backend for election-bot for reddit hosted at https:/
 - Clone the repo
 ```
 git clone https://github.com/hemanta212/nepal-election-api
+cd nepal-election-api
 ```
+- Install dependencies
+```
+go mod tidy
+```
+- Run the server
+```
+go run .
+```
+- For building an executable use,
+```
+go build .
+./nepal-election-api
+```
+
 
 ## Usage
 1. AreaName
