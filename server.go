@@ -4,17 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 )
 
 func main() {
-	fmt.Println(":: Listening on port http://localhost:8090")
 	http.HandleFunc("/", usage)
 	http.HandleFunc("/area", areaHandler)
 	http.HandleFunc("/url", urlHandler)
 	http.HandleFunc("/bulk", bulkHandler)
 
-	http.ListenAndServe(":8090", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8090"
+	}
+	fmt.Println(":: Listening on port http://localhost:" + port)
+	http.ListenAndServe(":"+port, nil)
 }
 
 func usage(w http.ResponseWriter, req *http.Request) {
