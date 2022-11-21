@@ -33,11 +33,7 @@ func fetchArea(url string) map[string][]map[string]string {
 func fetchNomineeData(e *colly.HTMLElement) []map[string]string {
 	nomineeData := []map[string]string{}
 
-	e.ForEach("div.candidate-wrapper", func(i int, el *colly.HTMLElement) {
-		if i%2 != 0 {
-			return
-		}
-
+	e.ForEach("div.candidate-wrapper", func(_ int, el *colly.HTMLElement) {
 		nomineeName := el.ChildText("div.nominee-name")
 		nomineeParty := el.ChildText("div.candidate-party-name")
 		votes := el.ChildText("div.vote-count")
