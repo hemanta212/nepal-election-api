@@ -37,6 +37,9 @@ func fetchNomineeData(e *colly.HTMLElement) []map[string]string {
 		nomineeName := el.ChildText("div.nominee-name")
 		nomineeParty := el.ChildText("div.candidate-party-name")
 		votes := el.ChildText("div.vote-count")
+		if strings.TrimSpace(votes) == "" {
+			votes = "0"
+		}
 
 		nomineeData = append(nomineeData, map[string]string{
 			"name":  nomineeName,
