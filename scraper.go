@@ -30,6 +30,36 @@ func fetchArea(url string) map[string][]map[string]string {
 	return results
 }
 
+func fetchSummary() map[string][]map[string]string {
+	url := "https://election.ekantipur.com/?lng=eng"
+	results := map[string][]map[string]string{}
+	// lastLoggedConstituency := 0
+
+	c := colly.NewCollector()
+	c.OnHTML("div.parties", func(e *colly.HTMLElement) {
+		e.ForEach("div.col-md-6", func(_ int, el *colly.HTMLElement) {
+			levelName := strings.ToLower(el.ChildText("h2.title"))
+			levelName = strings.TrimSpace(strings.Split(levelName, " ")[0])
+			levelData := []map[string]string{}
+			el.ForEach("div.row.gx-1", func(_ int, ele *colly.HTMLElement) {
+				party := ele.ChildText("div.party-name")
+				wins := ele.ChildText("div:nth-child(3)")
+				leads := ele.ChildText("div:nth-child(4)")
+				partyData := map[string]string{
+					"name":  party,
+					"wins":  wins,
+					"leads": leads,
+				}
+				levelData = append(levelData, partyData)
+			})
+			results[levelName] = levelData
+		})
+	})
+
+	c.Visit(url)
+	return results
+}
+
 func fetchNomineeData(e *colly.HTMLElement) []map[string]string {
 	nomineeData := []map[string]string{}
 

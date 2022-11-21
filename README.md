@@ -64,3 +64,16 @@ Requests at
 Where list must be list of valid AreaNames sepearated by commas.
 
 Example: https://electionapi.osac.org.np/bulk?list=pradesh-1/district-jhapa,pradesh-3/district-kathmandu
+
+
+###### Summary
+
+Requests at
+
+```
+/summary
+```
+
+Gives all party names, their wins and leads count in Federal and provincial category.
+
+Example: https://electionapi.osac.org.np/summary

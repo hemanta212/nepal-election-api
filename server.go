@@ -13,6 +13,7 @@ func main() {
 	http.HandleFunc("/area", areaHandler)
 	http.HandleFunc("/url", urlHandler)
 	http.HandleFunc("/bulk", bulkHandler)
+	http.HandleFunc("/summary", summaryHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -25,6 +26,7 @@ func main() {
 func usage(w http.ResponseWriter, req *http.Request) {
 	w.Write([]byte(`
 1. Usage
+
 1.1. AreaName
 
 Requests at
@@ -54,7 +56,18 @@ Requests at
 Where list must be list of valid AreaNames sepearated by commas.
 
 Example: https://electionapi.osac.org.np/bulk?list=pradesh-1/district-jhapa,pradesh-3/district-kathmandu
+
+1.4. Summary
+
+Requests at
+
+/summary
+
+Gives all party names, their wins and leads count in Federal and provincial category.
+
+Example: https://electionapi.osac.org.np/summary
 `))
+
 }
 
 func areaHandler(w http.ResponseWriter, r *http.Request) {
@@ -73,6 +86,16 @@ func areaHandler(w http.ResponseWriter, r *http.Request) {
 func urlHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.URL.Query().Get("url")
 	results := fetchArea(url)
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(results)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, "Errored out : %q", err)
+	}
+}
+
+func summaryHandler(w http.ResponseWriter, r *http.Request) {
+	results := fetchSummary()
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(results)
 	if err != nil {
