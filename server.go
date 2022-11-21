@@ -31,7 +31,10 @@ Requests at
 
 /area?name=pradesh-1/district-jhapa
 
-for more cities or general usecase see url method
+where name is valid kantipur url part representing an electoral area.
+This is supposed to be extracted from a kantipur url.
+
+Example: https://electionapi.osac.org.np/area?name=pradesh-1/district-jhapa
 
 1.2. URL
 
@@ -41,12 +44,16 @@ Requests at
 
 where url must be valid kantipur url in format similar to url in above example.
 
+Example: https://electionapi.osac.org.np/url?url=https://election.ekantipur.com/pradesh-1/district-jhapa?lng=eng
+
 1.3 Bulk List
 Requests at
 
 /bulk?list=pradesh-1/district-jhapa,pradesh-3/district-kathmandu
 
-Where list= must be valid AreaName sepearated by commas
+Where list must be list of valid AreaNames sepearated by commas.
+
+Example: https://electionapi.osac.org.np/bulk?list=pradesh-1/district-jhapa,pradesh-3/district-kathmandu
 `))
 }
 
