@@ -19,7 +19,7 @@ go mod tidy
 ```
 go run .
 ```
-- For building an executable use,
+- For building an executable, use;
 ```
 go build .
 ./nepal-election-api
@@ -27,25 +27,32 @@ go build .
 
 
 ## Usage
-1. AreaName
+###### AreaName
 
 Requests at
 
+```
 /area?name=pradesh-1/district-jhapa
+```
 
-for more cities or general usecase see url method
+where name is valid kantipur url part representing an electoral area.
+This is supposed to be extracted from a kantipur url.
 
-2. URL
+###### URL
 
 Requests at
 
+```
 /url?url=https://election.ekantipur.com/pradesh-1/district-jhapa?lng=eng
+```
 
 where url must be valid kantipur url in format similar to url in above example.
 
-3. Bulk List
+###### Bulk List
 Requests at
 
+```
 /bulk?list=pradesh-1/district-jhapa,pradesh-3/district-kathmandu
+```
 
-Where list= must be valid AreaName sepearated by commas
+Where list must be list of valid AreaNames sepearated by commas.
