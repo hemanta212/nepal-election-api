@@ -10,6 +10,7 @@ import (
 func fetchArea(url string) map[string][]map[string]string {
 	results := map[string][]map[string]string{}
 	lastLoggedConstituency := 0
+
 	c := colly.NewCollector()
 	c.OnHTML(".col-md-6", func(e *colly.HTMLElement) {
 		constituencyName := e.ChildText("h3")
@@ -22,23 +23,33 @@ func fetchArea(url string) map[string][]map[string]string {
 		}
 		constituencyName = strings.ToLower(constituencyName)
 
-		nomineeData := []map[string]string{}
-		e.ForEach("div.candidate-meta", func(i int, el *colly.HTMLElement) {
-			if i%2 != 0 {
-				return
-			}
-			nomineeName := el.ChildText("div.nominee-name")
-			nomineeParty := el.ChildText("div.candidate-party-name")
-			nomineeData = append(nomineeData, map[string]string{
-				"name":  nomineeName,
-				"party": nomineeParty,
-				"votes": "0",
-			})
-		})
-		results[constituencyName] = nomineeData
+		results[constituencyName] = fetchNomineeData(e)
 	})
+
 	c.Visit(url)
 	return results
+}
+
+func fetchNomineeData(e *colly.HTMLElement) []map[string]string {
+	nomineeData := []map[string]string{}
+
+	e.ForEach("div.candidate-wrapper", func(i int, el *colly.HTMLElement) {
+		if i%2 != 0 {
+			return
+		}
+
+		nomineeName := el.ChildText("div.nominee-name")
+		nomineeParty := el.ChildText("div.candidate-party-name")
+		votes := el.ChildText("div.vote-count")
+
+		nomineeData = append(nomineeData, map[string]string{
+			"name":  nomineeName,
+			"party": nomineeParty,
+			"votes": votes,
+		})
+	})
+
+	return nomineeData
 }
 
 func validateConstituencyNo(constituencyName string, lastLogged int) int {
