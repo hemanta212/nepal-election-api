@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -12,6 +13,8 @@ func fetchArea(url string) map[string][]map[string]string {
 	lastLoggedConstituency := 0
 
 	c := colly.NewCollector()
+	c.UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit 537.36(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
+	c.IgnoreRobotsTxt = true
 	c.OnHTML(".col-md-6", func(e *colly.HTMLElement) {
 		constituencyName := e.ChildText("h3")
 
@@ -23,6 +26,7 @@ func fetchArea(url string) map[string][]map[string]string {
 		}
 		constituencyName = strings.ToLower(constituencyName)
 
+		fmt.Println("Fetching nominee data...")
 		results[constituencyName] = fetchNomineeData(e)
 	})
 
@@ -36,6 +40,8 @@ func fetchSummary() map[string][]map[string]string {
 	// lastLoggedConstituency := 0
 
 	c := colly.NewCollector()
+	c.UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit 537.36(KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36"
+	c.IgnoreRobotsTxt = true
 	c.OnHTML("div.parties", func(e *colly.HTMLElement) {
 		e.ForEach("div.col-md-6", func(_ int, el *colly.HTMLElement) {
 			levelName := strings.ToLower(el.ChildText("h2.title"))
@@ -50,6 +56,7 @@ func fetchSummary() map[string][]map[string]string {
 					"wins":  wins,
 					"leads": leads,
 				}
+				fmt.Println(e.DOM)
 				levelData = append(levelData, partyData)
 			})
 			results[levelName] = levelData
@@ -61,12 +68,14 @@ func fetchSummary() map[string][]map[string]string {
 }
 
 func fetchNomineeData(e *colly.HTMLElement) []map[string]string {
+	fmt.Println("Starting fetching..")
 	nomineeData := []map[string]string{}
 
-	e.ForEach("div.candidate-wrapper", func(_ int, el *colly.HTMLElement) {
+	e.ForEach("div.candidate-wrappper", func(_ int, el *colly.HTMLElement) {
 		nomineeName := el.ChildText("div.nominee-name")
 		nomineeParty := el.ChildText("div.candidate-party-name")
 		votes := el.ChildText("div.vote-count")
+		fmt.Println(el.DOM, nomineeName, votes)
 		if strings.TrimSpace(votes) == "" {
 			votes = "0"
 		}

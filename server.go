@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -121,6 +122,7 @@ func bulkHandler(w http.ResponseWriter, r *http.Request) {
 		go func(url, district string) {
 			resultChannel <- result{district: district, data: fetchArea(url)}
 		}(url, district)
+		time.Sleep(2 * time.Second)
 	}
 	for i := 0; i < len(areaNames); i++ {
 		r := <-resultChannel
