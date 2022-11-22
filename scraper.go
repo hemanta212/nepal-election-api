@@ -8,8 +8,8 @@ import (
 	"github.com/gocolly/colly"
 )
 
-func fetchArea(url string) map[string][]map[string]string {
-	results := map[string][]map[string]string{}
+func fetchArea(url string) map[string][]map[string]interface{} {
+	results := map[string][]map[string]interface{}{}
 	lastLoggedConstituency := 0
 
 	c := colly.NewCollector()
@@ -67,9 +67,12 @@ func fetchSummary() map[string][]map[string]string {
 	return results
 }
 
-func fetchNomineeData(e *colly.HTMLElement) []map[string]string {
+func fetchNomineeData(e *colly.HTMLElement) []map[string]interface{} {
 	fmt.Println("Starting fetching..")
-	nomineeData := []map[string]string{}
+	nomineeData := []map[string]interface{}{}
+
+	card_text := e.ChildText("div.win-lead-text")
+	has_won := strings.Contains(card_text, "won with")
 
 	e.ForEach("div.candidate-wrappper", func(_ int, el *colly.HTMLElement) {
 		nomineeName := el.ChildText("div.nominee-name")
@@ -80,10 +83,11 @@ func fetchNomineeData(e *colly.HTMLElement) []map[string]string {
 			votes = "0"
 		}
 
-		nomineeData = append(nomineeData, map[string]string{
-			"name":  nomineeName,
-			"party": nomineeParty,
-			"votes": votes,
+		nomineeData = append(nomineeData, map[string]interface{}{
+			"name":            nomineeName,
+			"party":           nomineeParty,
+			"votes":           votes,
+			"winner_declared": has_won,
 		})
 	})
 

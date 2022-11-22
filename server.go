@@ -107,13 +107,13 @@ func summaryHandler(w http.ResponseWriter, r *http.Request) {
 
 type result struct {
 	district string
-	data     map[string][]map[string]string
+	data     map[string][]map[string]interface{}
 }
 
 func bulkHandler(w http.ResponseWriter, r *http.Request) {
 	areaNameSlug := r.URL.Query().Get("list")
 	areaNames := strings.Split(areaNameSlug, ",")
-	results := map[string]map[string][]map[string]string{}
+	results := map[string]map[string][]map[string]interface{}{}
 	resultChannel := make(chan result)
 
 	for _, areaName := range areaNames {
